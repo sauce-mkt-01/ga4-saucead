@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GA4 리포트 — 애드플랫폼 · 2026년 6월</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0d0f12;--surface:#151820;--surface2:#1c2030;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+    --text-primary:#f0f2f7;--text-secondary:#8a93a8;--text-muted:#4e5668;
+    --green:#3ecf8e;--green-bg:rgba(62,207,142,0.1);--green-border:rgba(62,207,142,0.25);
+    --blue:#5b9cf6;--blue-bg:rgba(91,156,246,0.1);--blue-border:rgba(91,156,246,0.25);
+    --red:#f06b6b;--red-bg:rgba(240,107,107,0.1);--red-border:rgba(240,107,107,0.25);
+    --amber:#f5a623;--amber-bg:rgba(245,166,35,0.1);--amber-border:rgba(245,166,35,0.25);
+    --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);--purple-border:rgba(167,139,250,0.2);
+    --teal:#2dd4bf;--teal-bg:rgba(45,212,191,0.1);--teal-border:rgba(45,212,191,0.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text-primary);font-family:"Noto Sans KR",sans-serif;font-weight:300;padding:48px 32px;line-height:1.6;}
+  .container{max-width:1100px;margin:0 auto;}
+  .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;padding-bottom:28px;border-bottom:0.5px solid var(--border2);}
+  .eyebrow{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.12em;color:var(--teal);text-transform:uppercase;margin-bottom:10px;}
+  h1{font-size:28px;font-weight:500;letter-spacing:-.02em;line-height:1.2;}
+  .period{font-size:13px;color:var(--text-secondary);margin-top:8px;}
+  .brand{font-family:"DM Mono",monospace;font-size:11px;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;}
+  .generated{font-size:12px;color:var(--text-muted);margin-top:4px;}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;}
+  .mc{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:20px 22px;}
+  .mc.au{border-color:var(--teal-border);} .mc.new{border-color:var(--blue-border);}
+  .mc.sess{border-color:var(--purple-border);} .mc.ev{border-color:var(--amber-border);}
+  .ml{font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:10px;}
+  .mv{font-size:36px;font-weight:700;line-height:1;letter-spacing:-.03em;margin-bottom:6px;}
+  .mc.au .mv{color:var(--teal);} .mc.new .mv{color:var(--blue);}
+  .mc.sess .mv{color:var(--purple);} .mc.ev .mv{color:var(--amber);}
+  .ms{font-size:11px;color:var(--text-muted);}
+  .section{margin-bottom:36px;}
+  .section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .badge{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px;}
+  .badge.daily{background:var(--teal-bg);color:var(--teal);border:0.5px solid var(--teal-border);}
+  .badge.pv{background:var(--blue-bg);color:var(--blue);border:0.5px solid var(--blue-border);}
+  .badge.eng{background:var(--purple-bg);color:var(--purple);border:0.5px solid var(--purple-border);}
+  .badge.click{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border);}
+  .badge.conv{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);}
+  .badge.insight{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border);}
+  .badge.media{background:rgba(255,255,255,.06);color:var(--text-secondary);border:0.5px solid var(--border2);}
+  .st{font-size:14px;font-weight:500;color:var(--text-secondary);}
+  .sc{font-family:"DM Mono",monospace;font-size:12px;color:var(--text-muted);margin-left:auto;}
+  .tw{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding:12px 16px;text-align:left;border-bottom:0.5px solid var(--border);background:var(--surface2);white-space:nowrap;}
+  thead th.r{text-align:right;}
+  tbody td{padding:11px 16px;border-bottom:0.5px solid var(--border);color:var(--text-primary);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover td{background:rgba(255,255,255,.02);}
+  tbody td.r{text-align:right;}
+  .en{font-family:"DM Mono",monospace;font-size:12px;}
+  .cv{font-family:"DM Mono",monospace;font-size:13px;font-weight:500;}
+  .uv{font-family:"DM Mono",monospace;font-size:12px;color:var(--text-secondary);}
+  .pv2{font-family:"DM Mono",monospace;font-size:12px;color:var(--text-muted);}
+  .dv{font-family:"DM Mono",monospace;font-size:12px;color:var(--text-secondary);}
+  .db{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:500;}
+  .wkd{background:rgba(167,139,250,.12);color:var(--purple);}
+  .wk{background:rgba(255,255,255,.05);color:var(--text-muted);}
+  .bw{display:flex;align-items:center;gap:8px;}
+  .bar{height:6px;border-radius:3px;background:var(--teal);opacity:.6;min-width:2px;}
+  .bar.eb{background:var(--blue);}
+  .bar.cb{background:var(--amber);}
+  .ct{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;margin-right:2px;white-space:nowrap;font-weight:400;}
+  .ca{background:rgba(255,255,255,.06);color:var(--text-muted);}
+  .cp{background:var(--blue-bg);color:var(--blue);}
+  .ce{background:var(--purple-bg);color:var(--purple);}
+  .cc{background:var(--amber-bg);color:var(--amber);}
+  .row-peak td{background:rgba(45,212,191,.04);}
+  .row-peak td:first-child{border-left:2px solid var(--teal);}
+  .row-today td{opacity:.6;}
+  .row-today td:first-child{border-left:2px solid var(--amber);}
+  .ig{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .ic{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:18px 20px;}
+  .ic.warn{border-color:var(--amber-border);} .ic.info{border-color:var(--blue-border);}
+  .ic.flag{border-color:var(--red-border);} .ic.good{border-color:var(--green-border);}
+  .in{font-family:"DM Mono",monospace;font-size:28px;font-weight:700;line-height:1;margin-bottom:6px;}
+  .ic.warn .in{color:var(--amber);} .ic.info .in{color:var(--blue);}
+  .ic.flag .in{color:var(--red);} .ic.good .in{color:var(--green);}
+  .il{font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;}
+  .id{font-size:12px;color:var(--text-secondary);line-height:1.6;}
+  .footer{margin-top:40px;padding-top:24px;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .fl{font-size:11px;color:var(--text-muted);font-family:"DM Mono",monospace;letter-spacing:.04em;}
+  .fr{font-size:11px;color:var(--text-muted);}
+  @media(max-width:768px){body{padding:24px 16px;}.metrics{grid-template-columns:repeat(2,1fr);}.ig{grid-template-columns:1fr;}.header{flex-direction:column;gap:16px;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div>
+    <div class="eyebrow">Sauce · GA4 Analytics Report</div>
+    <h1>애드플랫폼 GA4 리포트</h1>
+    <div class="period">2026년 6월 1일(월) — 6월 16일(화) · 집계 기준 <span style="color:var(--amber);font-size:11px;">※ 6/16 당일 데이터 집계 중</span></div>
+  </div>
+  <div style="text-align:right;">
+    <div class="brand">mobidoo / sauce · adplatform</div>
+    <div class="generated">GA4 Property: 536334445</div>
+    <div class="generated">Generated 2026.06.16</div>
+  </div>
+</div>
+
+<div class="metrics">
+  <div class="mc au"><div class="ml">활성 사용자 (AU)</div><div class="mv">5,163</div><div class="ms">6/1–6/16 일별 합산</div></div>
+  <div class="mc new"><div class="ml">신규 사용자</div><div class="mv">5,238</div><div class="ms">전체의 96.6%</div></div>
+  <div class="mc sess"><div class="ml">세션 수</div><div class="mv">5,478</div><div class="ms">세션/AU: 1.06</div></div>
+  <div class="mc ev"><div class="ml">총 이벤트 수</div><div class="mv">41,260</div><div class="ms">전체 이벤트 합산</div></div>
+</div>
+
+<!-- Daily AU -->
+<div class="section">
+  <div class="section-header"><span class="badge daily">Daily AU</span><span class="st">일별 활성 사용자</span><span class="sc">6/1 – 6/16</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>날짜</th><th class="r">활성 사용자</th><th class="r">신규 사용자</th><th class="r">세션 수</th><th style="width:180px">추이</th></tr></thead>
+    <tbody>
+      <tr class=""><td><span class="dv">2026-06-01</span><span class="db wk">월</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">174</span></td>
+      <td class="r"><span class="uv">165</span></td>
+      <td class="r"><span class="pv2">198</span></td>
+      <td><div class="bw"><div class="bar" style="width:56px;"></div><span class="pv2" style="font-size:11px">174</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-02</span><span class="db wk">화</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">195</span></td>
+      <td class="r"><span class="uv">189</span></td>
+      <td class="r"><span class="pv2">212</span></td>
+      <td><div class="bw"><div class="bar" style="width:62px;"></div><span class="pv2" style="font-size:11px">195</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-03</span><span class="db wk">수</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">148</span></td>
+      <td class="r"><span class="uv">144</span></td>
+      <td class="r"><span class="pv2">155</span></td>
+      <td><div class="bw"><div class="bar" style="width:47px;"></div><span class="pv2" style="font-size:11px">148</span></div></td></tr>
+      <tr class="row-peak"><td><span class="dv">2026-06-04</span><span class="db wk">목</span> <span style="font-size:10px;color:var(--teal)">▲ PEAK</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);font-size:16px;">497</span></td>
+      <td class="r"><span class="uv">483</span></td>
+      <td class="r"><span class="pv2">518</span></td>
+      <td><div class="bw"><div class="bar" style="width:160px;opacity:1"></div><span class="pv2" style="font-size:11px">497</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-05</span><span class="db wk">금</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">410</span></td>
+      <td class="r"><span class="uv">422</span></td>
+      <td class="r"><span class="pv2">444</span></td>
+      <td><div class="bw"><div class="bar" style="width:131px;"></div><span class="pv2" style="font-size:11px">410</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-06</span><span class="db wkd">토</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">379</span></td>
+      <td class="r"><span class="uv">394</span></td>
+      <td class="r"><span class="pv2">398</span></td>
+      <td><div class="bw"><div class="bar" style="width:122px;"></div><span class="pv2" style="font-size:11px">379</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-07</span><span class="db wkd">일</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">430</span></td>
+      <td class="r"><span class="uv">441</span></td>
+      <td class="r"><span class="pv2">451</span></td>
+      <td><div class="bw"><div class="bar" style="width:138px;"></div><span class="pv2" style="font-size:11px">430</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-08</span><span class="db wk">월</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">412</span></td>
+      <td class="r"><span class="uv">401</span></td>
+      <td class="r"><span class="pv2">430</span></td>
+      <td><div class="bw"><div class="bar" style="width:132px;"></div><span class="pv2" style="font-size:11px">412</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-09</span><span class="db wk">화</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">364</span></td>
+      <td class="r"><span class="uv">375</span></td>
+      <td class="r"><span class="pv2">382</span></td>
+      <td><div class="bw"><div class="bar" style="width:117px;"></div><span class="pv2" style="font-size:11px">364</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-10</span><span class="db wk">수</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">365</span></td>
+      <td class="r"><span class="uv">376</span></td>
+      <td class="r"><span class="pv2">383</span></td>
+      <td><div class="bw"><div class="bar" style="width:117px;"></div><span class="pv2" style="font-size:11px">365</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-11</span><span class="db wk">목</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">333</span></td>
+      <td class="r"><span class="uv">344</span></td>
+      <td class="r"><span class="pv2">353</span></td>
+      <td><div class="bw"><div class="bar" style="width:107px;"></div><span class="pv2" style="font-size:11px">333</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-12</span><span class="db wk">금</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">297</span></td>
+      <td class="r"><span class="uv">312</span></td>
+      <td class="r"><span class="pv2">315</span></td>
+      <td><div class="bw"><div class="bar" style="width:95px;"></div><span class="pv2" style="font-size:11px">297</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-13</span><span class="db wkd">토</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">328</span></td>
+      <td class="r"><span class="uv">356</span></td>
+      <td class="r"><span class="pv2">347</span></td>
+      <td><div class="bw"><div class="bar" style="width:105px;"></div><span class="pv2" style="font-size:11px">328</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-14</span><span class="db wkd">일</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">314</span></td>
+      <td class="r"><span class="uv">326</span></td>
+      <td class="r"><span class="pv2">330</span></td>
+      <td><div class="bw"><div class="bar" style="width:101px;"></div><span class="pv2" style="font-size:11px">314</span></div></td></tr>
+      <tr class=""><td><span class="dv">2026-06-15</span><span class="db wk">월</span></td>
+      <td class="r"><span class="cv" style="color:var(--teal);">392</span></td>
+      <td class="r"><span class="uv">396</span></td>
+      <td class="r"><span class="pv2">419</span></td>
+      <td><div class="bw"><div class="bar" style="width:126px;"></div><span class="pv2" style="font-size:11px">392</span></div></td></tr>
+      <tr class="row-today"><td><span class="dv">2026-06-16</span><span class="db wk">화</span> <span style="font-size:10px;color:var(--amber)">집계 중</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber);">125</span></td>
+      <td class="r"><span class="uv">114</span></td>
+      <td class="r"><span class="pv2">143</span></td>
+      <td><div class="bw"><div class="bar" style="width:40px;background:var(--amber)"></div><span class="pv2" style="font-size:11px">125</span></div></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- Page View -->
+<div class="section">
+  <div class="section-header"><span class="badge pv">Page View</span><span class="st">페이지뷰 이벤트</span><span class="sc">10종</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>이벤트명</th><th class="r">이벤트 수</th><th class="r">비고</th><th style="width:180px">비율</th></tr></thead>
+    <tbody>
+      <tr><td><span class="en">page_view</span><span class="ct ca" style="margin-left:8px">자동 수집</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">8,461</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:160px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_campaign</span><span class="ct cp" style="margin-left:8px">커스텀 · 로그인 후</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">6,572</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:124px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_about</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">5,586</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:105px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_main</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">975</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:18px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_signin</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">338</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:6px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_product</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">285</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:5px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_recommendation</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">208</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:3px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_cart</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">48</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:2px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_signup</span><span class="ct cp" style="margin-left:8px">커스텀</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">28</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:2px"></div></div></td></tr>
+      <tr><td><span class="en">page_view_dashboard</span><span class="ct cp" style="margin-left:8px">커스텀 · 로그인 후</span></td>
+      <td class="r"><span class="cv" style="color:var(--blue)">26</span></td>
+      <td class="r"><span class="pv2"></span></td>
+      <td><div class="bw"><div class="bar eb" style="width:2px"></div></div></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- Engagement -->
+<div class="section">
+  <div class="section-header"><span class="badge eng">Engagement</span><span class="st">세션 · 참여 이벤트</span><span class="sc">5종</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>이벤트명</th><th class="r">이벤트 수</th><th class="r">비고</th><th style="width:180px">비율</th></tr></thead>
+    <tbody>
+      <tr><td><span class="en">session_start</span><span class="ct ca" style="margin-left:8px">자동</span></td>
+      <td class="r"><span class="cv" style="color:var(--purple)">5,708</span></td>
+      <td class="r"></td>
+      <td><div class="bw"><div class="bar" style="width:160px;background:var(--purple)"></div></div></td></tr>
+      <tr><td><span class="en">scroll</span><span class="ct ca" style="margin-left:8px">자동</span></td>
+      <td class="r"><span class="cv" style="color:var(--purple)">5,601</span></td>
+      <td class="r"></td>
+      <td><div class="bw"><div class="bar" style="width:157px;background:var(--purple)"></div></div></td></tr>
+      <tr><td><span class="en">first_visit</span><span class="ct ca" style="margin-left:8px">자동</span></td>
+      <td class="r"><span class="cv" style="color:var(--purple)">5,238</span></td>
+      <td class="r"></td>
+      <td><div class="bw"><div class="bar" style="width:146px;background:var(--purple)"></div></div></td></tr>
+      <tr><td><span class="en">user_engagement</span><span class="ct ca" style="margin-left:8px">자동</span></td>
+      <td class="r"><span class="cv" style="color:var(--purple)">1,086</span></td>
+      <td class="r"></td>
+      <td><div class="bw"><div class="bar" style="width:30px;background:var(--purple)"></div></div></td></tr>
+      <tr><td><span class="en">form_start</span><span class="ct ca" style="margin-left:8px">Enhanced Measurement · 전환 지표 사용 불가</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">143</span></td>
+      <td class="r"></td>
+      <td><div class="bw"><div class="bar" style="width:4px;background:var(--purple)"></div></div></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- Click Events -->
+<div class="section">
+  <div class="section-header"><span class="badge click">Click</span><span class="st">클릭 이벤트 (GNB · CTA · Floating)</span><span class="sc">24종</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>이벤트명</th><th class="r">이벤트 수</th><th class="r">구분</th><th style="width:180px">비율</th></tr></thead>
+    <tbody>
+      <tr><td><span class="en">click_gnb_campaign</span><span class="ct cc" style="margin-left:8px">GNB</span><span style="font-size:10px;color:var(--amber);margin-left:6px">▲ GNB 1위</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">143</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:160px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_home</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">132</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:147px"></div></div></td></tr>
+      <tr><td><span class="en">click_product_main</span><span class="ct cc" style="margin-left:8px">메인</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">88</span></td>
+      <td class="r"><span class="pv2">메인</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:98px"></div></div></td></tr>
+      <tr><td><span class="en">click_recommendation_floating_rec</span><span class="ct cc" style="margin-left:8px">플로팅</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">83</span></td>
+      <td class="r"><span class="pv2">플로팅</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:92px"></div></div></td></tr>
+      <tr><td><span class="en">click_shop_floating_about</span><span class="ct cc" style="margin-left:8px">플로팅</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">70</span></td>
+      <td class="r"><span class="pv2">플로팅</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:78px"></div></div></td></tr>
+      <tr><td><span class="en">click_recommendation_floating_about</span><span class="ct cc" style="margin-left:8px">플로팅</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">64</span></td>
+      <td class="r"><span class="pv2">플로팅</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:71px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_about</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">47</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:52px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_user_info</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">44</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:49px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_login</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">41</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:45px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_cart</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">37</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:41px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_dashboard</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">36</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:40px"></div></div></td></tr>
+      <tr><td><span class="en">click_gnb_recommendation</span><span class="ct cc" style="margin-left:8px">GNB</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">30</span></td>
+      <td class="r"><span class="pv2">GNB</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:33px"></div></div></td></tr>
+      <tr><td><span class="en">click_signup_signin</span><span class="ct cc" style="margin-left:8px">회원</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">19</span></td>
+      <td class="r"><span class="pv2">회원</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:21px"></div></div></td></tr>
+      <tr><td><span class="en">click_cart_main</span><span class="ct cc" style="margin-left:8px">장바구니</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">18</span></td>
+      <td class="r"><span class="pv2">장바구니</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:20px"></div></div></td></tr>
+      <tr><td><span class="en">click_shop_bottom_about</span><span class="ct cc" style="margin-left:8px">CTA</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">18</span></td>
+      <td class="r"><span class="pv2">CTA</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:20px"></div></div></td></tr>
+      <tr><td><span class="en">click_recommendation_top_about</span><span class="ct cc" style="margin-left:8px">추천</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">18</span></td>
+      <td class="r"><span class="pv2">추천</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:20px"></div></div></td></tr>
+      <tr><td><span class="en">click_shop_top_about</span><span class="ct cc" style="margin-left:8px">CTA</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">14</span></td>
+      <td class="r"><span class="pv2">CTA</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:15px"></div></div></td></tr>
+      <tr><td><span class="en">click_cart_floating_product</span><span class="ct cc" style="margin-left:8px">플로팅</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">12</span></td>
+      <td class="r"><span class="pv2">플로팅</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:13px"></div></div></td></tr>
+      <tr><td><span class="en">click_campaign_apply_main</span><span class="ct cc" style="margin-left:8px">신청</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">7</span></td>
+      <td class="r"><span class="pv2">신청</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:7px"></div></div></td></tr>
+      <tr><td><span class="en">click_campaign_apply_floating_product</span><span class="ct cc" style="margin-left:8px">신청</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">5</span></td>
+      <td class="r"><span class="pv2">신청</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:5px"></div></div></td></tr>
+      <tr><td><span class="en">click_campaign_apply_cart</span><span class="ct cc" style="margin-left:8px">신청</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">4</span></td>
+      <td class="r"><span class="pv2">신청</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:4px"></div></div></td></tr>
+      <tr><td><span class="en">click_cart_product</span><span class="ct cc" style="margin-left:8px">장바구니</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">3</span></td>
+      <td class="r"><span class="pv2">장바구니</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:3px"></div></div></td></tr>
+      <tr><td><span class="en">click_recommendation_bottom_about</span><span class="ct cc" style="margin-left:8px">CTA</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">2</span></td>
+      <td class="r"><span class="pv2">CTA</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:2px"></div></div></td></tr>
+      <tr><td><span class="en">click_login_cart</span><span class="ct cc" style="margin-left:8px">장바구니</span></td>
+      <td class="r"><span class="cv" style="color:var(--amber)">2</span></td>
+      <td class="r"><span class="pv2">장바구니</span></td>
+      <td><div class="bw"><div class="bar cb" style="width:2px"></div></div></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- Conversion -->
+<div class="section">
+  <div class="section-header"><span class="badge conv">Conversion</span><span class="st">전환 관련 이벤트</span><span class="sc">핵심 4종</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>이벤트명</th><th class="r">이벤트 수</th><th>비고</th></tr></thead>
+    <tbody>
+      <tr><td><span class="en">click_campaign_apply_main</span></td><td class="r"><span class="cv" style="color:var(--green)">7</span></td><td><span style="font-size:12px;color:var(--text-secondary)">메인 '지금 캠페인 신청하기' 클릭</span></td></tr>
+      <tr><td><span class="en">click_campaign_apply_floating_product</span></td><td class="r"><span class="cv" style="color:var(--green)">5</span></td><td><span style="font-size:12px;color:var(--text-secondary)">상품 상세 플로팅 '바로 신청하기' 클릭</span></td></tr>
+      <tr><td><span class="en">click_campaign_apply_cart</span></td><td class="r"><span class="cv" style="color:var(--green)">4</span></td><td><span style="font-size:12px;color:var(--text-secondary)">장바구니 '지금 캠페인 신청하기' 클릭</span></td></tr>
+      <tr><td><span class="en">click_signup_signin</span></td><td class="r"><span class="cv" style="color:var(--green)">19</span></td><td><span style="font-size:12px;color:var(--text-secondary)">/signin 내 '회원가입' 클릭</span></td></tr>
+      <tr><td><span class="en">click_signup_complete_signup</span></td><td class="r"><span class="cv" style="color:var(--green)">3</span></td><td><span style="font-size:12px;color:var(--text-secondary)">회원가입 완료 (누적 3건)</span></td></tr>
+      <tr><td><span class="en" style="color:var(--text-muted)">form_start</span><span class="ct ca" style="margin-left:8px">Enhanced Measurement 자동</span></td><td class="r"><span class="cv" style="color:var(--text-muted)">143</span></td><td><span style="font-size:12px;color:var(--text-muted)">참고용 · 로그인·검색 폼 포함 — 전환 지표 사용 불가</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- Insights -->
+<div class="section">
+  <div class="section-header"><span class="badge insight">Insights</span><span class="st">주요 인사이트 및 액션 포인트</span></div>
+  <div class="ig">
+    <div class="ic warn">
+      <div class="in">6/4</div>
+      <div class="il">네이버·카카오 DA 집행 시작 — 트래픽 유입 확인</div>
+      <div class="id">6/4(목) 네이버·카카오 DA 집행 시작일. 활성 사용자 497명으로 직전일(148명) 대비 <strong>+236% 급등</strong>. 이후 6/5~6/15 기간 300~430명대를 유지 중. 6/15(월) 392명으로 다시 반등.</div>
+    </div>
+    <div class="ic flag">
+      <div class="in">96.6%</div>
+      <div class="il">신규 사용자 비율 — 재방문 전환 전략 필요</div>
+      <div class="id">16일 기준 신규 사용자 비율 96.6%. 재방문 사용자가 매우 적어 리텐션이 약함. 가입 유도 또는 이메일 재방문 캠페인 검토 권장.</div>
+    </div>
+    <div class="ic info">
+      <div class="in">3,145→6,572</div>
+      <div class="il">page_view_campaign — 기존 로그인 사용자 재방문 지표</div>
+      <div class="id">이벤트 정의서 기준 로그인 후 /campaign 진입 시 발화. 8일 대비 2배 이상 증가(3,145→6,572)로 기존 사용자 활동량이 꾸준히 유지되고 있음.</div>
+    </div>
+    <div class="ic good">
+      <div class="in">16건</div>
+      <div class="il">캠페인 신청 클릭 증가 — 전환 이벤트 발생 확인</div>
+      <div class="id">click_campaign_apply_* 합산 <strong>16건</strong>(메인 7 + 플로팅 5 + 장바구니 4). 8일 시점(2건) 대비 8배 증가. 회원가입 완료도 1→<strong>3건</strong>으로 증가.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Media Mix -->
+<div class="section">
+  <div class="section-header"><span class="badge media">Media Mix</span><span class="st">광고 매체별 유입 비중</span><span class="sc">6/1–6/16 · 세션 기준</span></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+    <div style="background:var(--surface);border:0.5px solid rgba(245,166,35,.3);border-radius:12px;padding:18px 20px">
+      <div style="font-size:10px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:8px">KAKAO DA</div>
+      <div style="font-size:30px;font-weight:700;color:#f5a623;letter-spacing:-.03em;line-height:1">43.4%</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px">2,376 세션 · 집행 시작 6/4</div>
+    </div>
+    <div style="background:var(--surface);border:0.5px solid rgba(91,156,246,.3);border-radius:12px;padding:18px 20px">
+      <div style="font-size:10px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:8px">META (Instagram)</div>
+      <div style="font-size:30px;font-weight:700;color:#5b9cf6;letter-spacing:-.03em;line-height:1">25.5%</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px">1,396 세션 · 집행 시작 6/1</div>
+    </div>
+    <div style="background:var(--surface);border:0.5px solid rgba(62,207,142,.3);border-radius:12px;padding:18px 20px">
+      <div style="font-size:10px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:8px">GOOGLE CPC</div>
+      <div style="font-size:30px;font-weight:700;color:#3ecf8e;letter-spacing:-.03em;line-height:1">10.1%</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px">555 세션 · 집행 시작 6/1</div>
+    </div>
+    <div style="background:var(--surface);border:0.5px solid rgba(45,212,191,.3);border-radius:12px;padding:18px 20px">
+      <div style="font-size:10px;color:var(--text-muted);letter-spacing:.06em;margin-bottom:8px">NAVER DA</div>
+      <div style="font-size:30px;font-weight:700;color:#2dd4bf;letter-spacing:-.03em;line-height:1">10.0%</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px">546 세션 · 집행 시작 6/4</div>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:22px 24px">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px;letter-spacing:.06em">전체 세션 대비 비중 (5,478 세션)</div>
+    <div style="display:flex;height:10px;border-radius:6px;overflow:hidden;margin-bottom:16px;gap:2px">
+      <div style="width:43.4%;background:#f5a623;border-radius:4px 0 0 4px"></div>
+      <div style="width:25.5%;background:#5b9cf6"></div>
+      <div style="width:10.1%;background:#3ecf8e"></div>
+      <div style="width:10.0%;background:#2dd4bf"></div>
+      <div style="width:11.0%;background:var(--surface2);border:0.5px solid var(--border2);border-radius:0 4px 4px 0"></div>
+    </div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:#f5a623;border-radius:2px"></div><span style="font-size:12px;color:var(--text-secondary)">카카오 43.4%</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:#5b9cf6;border-radius:2px"></div><span style="font-size:12px;color:var(--text-secondary)">메타 25.5%</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:#3ecf8e;border-radius:2px"></div><span style="font-size:12px;color:var(--text-secondary)">구글 10.1%</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:#2dd4bf;border-radius:2px"></div><span style="font-size:12px;color:var(--text-secondary)">네이버 10.0%</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:var(--surface2);border:0.5px solid var(--border2);border-radius:2px"></div><span style="font-size:12px;color:var(--text-muted)">다이렉트·기타 11.0%</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="fl">SAUCE · GA4 ADPLATFORM REPORT · 2026 JUN W1–W3</div>
+  <div class="fr">GA4 Property 536334445 · 집계 기간 2026.06.01 – 06.16</div>
+</div>
+
+</div>
+</body>
+</html>
